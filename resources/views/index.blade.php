@@ -5,7 +5,11 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="../favicon.png">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+<<<<<<< HEAD
+    <title>Admin Panel - PPDB</title>
+=======
     <title>Admin Panel - Perpustakaan</title>
+>>>>>>> 183c47f666b51293894052217df658cd339eefac
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="{{ asset('admin/css/bootstrap.min.css') }}">

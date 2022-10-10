@@ -1,8 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardAdmin;
-use App\Http\Controllers\QuisionerController;
+use App\Http\Controllers\Admin\DashboardAdmin;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +18,13 @@ use App\Http\Controllers\QuisionerController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('dashboard', [DashboardAdmin::class,'index'])->name('dashboard');
-Route::resource('quisioner', QuisionerController::class);
-Route::get('quisioner', [QuisionerController::class,'index'])->name('quisioner');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('admin')->middleware('auth', 'isAdmin')->group(
+    function () {
+        Route::get('/dashboard', [DashboardAdmin::class, 'index'])->name('dashboard');
+    }
+);
