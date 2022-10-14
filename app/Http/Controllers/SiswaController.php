@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Quisioner;
 use Illuminate\Http\Request;
+use App\Models\Siswa;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
-class QuisionerController extends Controller
+class SiswaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +18,7 @@ class QuisionerController extends Controller
      */
     public function index()
     {
-        $Quisioner = Quisioner::latest()->get();
-        return view('quisioner',compact('Quisioner'));
+        return view('user.daftar');
     }
 
     /**
@@ -25,9 +26,9 @@ class QuisionerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-     {
-
+    public function create()
+    {
+        //
     }
 
     /**
@@ -38,15 +39,28 @@ class QuisionerController extends Controller
      */
     public function store(Request $request)
     {
-        $Quisioner = new Quisioner([
-            'quisioner'=> $request->quisioner,
-            'quisioner_deskripsi' => $request->quisioner_deskripsi,
-           //  'quisioner_status'=>$request->0,
-         ]);
-         $Quisioner->save();
-            return redirect()->route('quisioner')
-            ->with('success','Quisioner created successfully.');
+        $request->validate([
+            'user_id' => ['nullable'],
+            'nisn' => ['required', 'integer', 'min:4'],
+            'nama_lengkap' => ['required', 'string', 'max:50'],
+            'alamat' => ['required', 'string', 'max:255'],
+            'no_telp' => ['required', 'integer'],
+            'umur' => ['required', 'integer'],
+            'seleksi_status' => ['nullable'],
+        ]);
 
+        $siswa = new Siswa([
+            'user_id' => Auth::user()->id,
+            'nisn' => $request->nisn,
+            'nama_lengkap' => $request->nama_lengkap,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+            'umur' => $request->umur,
+            'seleksi_status' => 0
+        ]);
+        $siswa->save([]);
+
+        return redirect()->route('home')->with('status', 'Berhasil Mendaftar Sebagai Calon Siswa Baru!');
     }
 
     /**
@@ -57,26 +71,11 @@ class QuisionerController extends Controller
      */
     public function show($id)
     {
-        $data = DB::table('quisioner')->where('id',$id)->first();
+        $siswa = Siswa::all();
+        $user = User::findOrFail($id);
 
-        $quisioner_status = $data->quisioner_status;
-
-        if($quisioner_status == 0){
-            DB::table('quisioner')->where('id',$id)->update([
-                'quisioner_status'=>1
-            ]);
-        }else{
-            DB::table('quisioner')->where('id',$id)->update([
-                'quisioner_status'=>0
-            ]);
-        }
-        Session::flash('Success','Status berhasil di ubah');
-
-        return redirect('quisioner');
-
+        return view('user.result', compact('siswa'));
     }
-//status
-
 
     /**
      * Show the form for editing the specified resource.
@@ -84,7 +83,7 @@ class QuisionerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(QuisionerController $quisioner)
+    public function edit($id)
     {
         //
     }
@@ -98,7 +97,7 @@ class QuisionerController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+        //
     }
 
     /**
@@ -107,7 +106,7 @@ class QuisionerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuisionerController $quisioner)
+    public function destroy($id)
     {
         //
     }

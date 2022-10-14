@@ -1,4 +1,4 @@
-@extends('index')
+@extends('admin.index')
 
 @section('content')
     <!-- page title area end -->
@@ -15,7 +15,7 @@
                                 class="btn btn-info col-md-2">Tambah Quisioner</button>
                         </div>
                         <div class="data-tables datatable-dark">
-                            <table id="dataTable3" class="display" style="width:100%">
+                            <table id="dataTable3" class="table table-hover text-center align-middle" style="width:100%">
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>No.</th>
@@ -35,23 +35,17 @@
                                                 @if ($quis->quisioner_status=='1')
                                                     <p style="color:green">Publish</p>
                                                 @else
-  <a href="{{ route('quisioner.show', $quis->id) }}"><button type="button" class="btn btn-danger" data-dismiss="modal">Publish</button></a>
+                                                    <a href="{{ route('quisioner.show', $quis->id) }}"><button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">Publish</button></a>
                                                 @endif
 
                                             </td>
                                             <td>
-                                                <div class="btn-group">
-                                                    <a href="{{ route('quisioner.edit', $quis->id) }}"
-                                                        class="btn btn-info">
-                                                        <i class="fa fa-pencil"></i> </a>
-                                                    <form action="{{ route('quisioner.destroy', $quis->id) }}"
-                                                        method="POST">
-
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger"><i
-                                                                class="fa fa-trash"></i></button>
-                                                    </form>
+                                                <form action="{{ route('quisioner.destroy',$quis->id) }}" method="Post">
+                                                <a class="btn btn-primary btn-sm" href="{{ route('quisioner.edit',$quis->id) }}"><i class="fa fa-pencil"></i> Edit</a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Delete</button>
+                                                </form>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -104,7 +98,8 @@
             dom: 'Bfrtip',
             buttons: [
                 'print'
-            ]
+            ],
+            searching: false
         });
     });
 </script>
